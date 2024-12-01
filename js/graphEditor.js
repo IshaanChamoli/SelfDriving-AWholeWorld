@@ -20,23 +20,28 @@ class GraphEditor {
     }
 
     #handleMouseDown(evt) {
+        if (evt.button == 1) { // middle click
+            return;
+        }
+
         if (evt.button == 2) { // right click
             if (this.selected) {
                 this.selected = null;
             } else if (this.hovered) {
                 this.#removePoint(this.hovered);
             }
+            return;
         }
 
         if (evt.button == 0) { // left click
             if (this.hovered) {
-                this.#select(this.mouse);
-                this.selected = this.hovered;
+                this.#select(this.hovered);
                 this.dragging = true;
             } else {
-                this.graph.addPoint(this.mouse);
-                this.#select(this.mouse);
-                this.hovered = this.mouse;
+                const point = this.mouse;
+                this.graph.addPoint(point);
+                this.#select(point);
+                this.hovered = point;
             }
         }
     }
