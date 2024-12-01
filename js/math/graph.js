@@ -4,6 +4,32 @@ class Graph {
         this.segments = segments;
     }
 
+    static load(info) {
+        if (!info || !info.points || !info.segments) {
+            return new Graph();
+        }
+
+        const points = info.points.map(p => {
+            if (typeof p.x === 'number' && typeof p.y === 'number') {
+                return new Point(p.x, p.y);
+            }
+            return null;
+        }).filter(p => p !== null);
+
+        const segments = info.segments.map(s => {
+            if (!s.p1 || !s.p2) return null;
+            
+            const p1 = points.find(p => p.x === s.p1.x && p.y === s.p1.y);
+            const p2 = points.find(p => p.x === s.p2.x && p.y === s.p2.y);
+            
+            if (!p1 || !p2) return null;
+            
+            return new Segment(p1, p2);
+        }).filter(s => s !== null);
+
+        return new Graph(points, segments);
+    }
+
     addPoint(point) {
         this.points.push(point);
     }
